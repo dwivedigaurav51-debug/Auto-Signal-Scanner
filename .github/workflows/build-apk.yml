@@ -1,4 +1,5 @@
 name: Build Android APK
+# rebuild 2026-09-30 railway public API
 on:
   workflow_dispatch:
   push:
