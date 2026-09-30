@@ -3,6 +3,8 @@ import android.Manifest
 import android.content.*
 import android.os.Bundle
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -26,12 +28,9 @@ class MainActivity : AppCompatActivity() {
   findViewById<TextView>(R.id.status).text=if(live)"🟢 SCANNER LIVE" else "🔴 SCANNER OFF / NO HEARTBEAT"
   val lastScan=sp.getString("lastScan","Never"); val price=sp.getString("lastPrice","—"); val pair=sp.getString("lastPair","—")
   val candles=sp.getInt("scanCount",0); val reason=sp.getString("lastReason","Start scanner to begin diagnostics")
-  findViewById<TextView>(R.id.health).text="Heartbeat: "+if(hb==0L)"—" else ((now-hb)/1000).toString()+" sec ago"+"
-Last scan: "+lastScan+"
-Feed: "+pair+" @ "+price+"
-Scans received: "+candles+"
-Signal engine: "+if(live)"RUNNING" else "STOPPED"+"
-Last decision: "+reason
+  val heartbeatText=if(hb==0L) "—" else ((now-hb)/1000).toString()+" sec ago"
+  val engineText=if(live) "RUNNING" else "STOPPED"
+  findViewById<TextView>(R.id.health).text="Heartbeat: "+heartbeatText+"\nLast scan: "+lastScan+"\nFeed: "+pair+" @ "+price+"\nScans received: "+candles+"\nSignal engine: "+engineText+"\nLast decision: "+reason
   findViewById<TextView>(R.id.history).text=sp.getString("history","No signals yet")
   findViewById<TextView>(R.id.marketStats).text="Wins "+sp.getInt("mwin",0)+" • Losses "+sp.getInt("mloss",0)
   findViewById<TextView>(R.id.olympStats).text="Wins "+sp.getInt("owin",0)+" • Losses "+sp.getInt("oloss",0)+" • Pending/Unavailable "+sp.getInt("opending",0)
